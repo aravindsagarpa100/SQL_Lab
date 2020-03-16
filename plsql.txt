@@ -1,0 +1,1082 @@
+                                   PL/SQL
+                                ------------
+
+
+1))
+SQL> set serveroutput on
+SQL> begin
+  2  dbms_output.put_line('Hello world!');
+  3  end;
+  4  /
+Hello world!
+
+PL/SQL procedure successfully completed.
+
+
+2))
+SQL>  DECLARE
+  2      mark NUMBER:= &1;
+  3      grade varchar2(10);
+  4      begin
+  5      if mark >=90 then
+  6      grade:='A';
+  7      elsif mark >=80 then
+  8      grade:='B';
+  9      elsif mark >=70 then
+ 10      grade:='C';
+ 11      elsif mark >=60 then
+ 12      grade:='D';
+ 13      elsif mark >=50 then
+ 14      grade:='E';
+ 15      else
+ 16      grade:='F';
+ 17      end if;
+ 18      dbms_output.put_line('Grade:: ' || grade);
+ 19      end;
+ 20      /
+Enter value for 1: 88
+old   2:     mark NUMBER:= &1;
+new   2:     mark NUMBER:= 88;
+Grade:: B
+
+PL/SQL procedure successfully completed.
+
+
+3))
+SQL> declare
+  2  type namesarray IS VARRAY(5) OF VARCHAR2(10);
+  3  type grades IS VARRAY(5) OF INTEGER;
+  4  names namesarray;
+  5  math grades;
+  6  comp grades;
+  7  begin
+  8  names := namesarray('Ram', 'Raj', 'Riya', 'Rishabh', 'Rani');
+  9  math:= grades(98, 97, 78, 77, 92);
+ 10  comp:= grades(94, 87, 68, 83, 98);
+ 11  for i in 1..5
+ 12  loop
+ 13  dbms_output.put_line('Student: ' || names(i) || ' Marks of maths: ' || math
+(i) || 'marks of CS: ' || comp(i));
+ 14   end loop;
+ 15   end;
+ 16  /
+Student: Ram:: Marks of maths: 98   marks of CS: 94
+Student: Raj:: Marks of maths: 97   marks of CS: 87
+Student: Riya:: Marks of maths: 78   marks of CS: 68
+Student: Rishabh:: Marks of maths: 77   marks of CS: 83
+Student: Rani:: Marks of maths: 92   marks of CS: 98
+
+PL/SQL procedure successfully completed.
+
+
+
+4))
+SQL> declare
+  2  fac number :=1;
+  3  n number := &1;
+  4  begin
+  5  while n>0
+  6  loop
+  7  fac:=fac*n;
+  8  n:=n-1;
+  9  end loop;
+ 10  dbms_output.put_line(fac);
+ 11  end;
+ 12  /
+Enter value for 1: 5
+old   3: n number := &1;
+new   3: n number := 5;
+120
+
+PL/SQL procedure successfully completed.
+
+
+
+5))
+SQL> DECLARE
+  2  i NUMBER:=1;
+  3  n integer;
+  4  begin
+  5  dbms_output.put_line('Multiplication table of 3.');
+  6  loop
+  7  n:=3*i;
+  8  i:=i+1;
+  9  dbms_output.put_line(n);
+ 10  EXIT WHEN i>10;
+ 11  end loop;
+ 12  end;
+ 13  /
+Multiplication table of 3.
+3
+6
+9
+12
+15
+18
+21
+24
+27
+30
+
+PL/SQL procedure successfully completed.
+
+
+
+6))
+SQL> DECLARE
+  2      i NUMBER:=1;
+  3      n integer;
+  4      k integer;
+  5      begin
+  6      loop
+  7      if (MOd(i,2)=0) then
+  8      n:=i;
+  9      else
+ 10      k:=i;
+ 11      end if;
+ 12      i:=i+1;
+ 13      INSERT INTO oddeven(even,odd) VALUES (n,k);
+ 14      EXIT WHEN i>10;
+ 15      end loop;
+ 16      end;
+ 17      /
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from oddeven;
+
+      EVEN        ODD
+---------- ----------                
+         2          1                  
+         4          3                   
+         6          5                   
+         8          7                   
+        10          9
+
+10 rows selected.
+
+
+
+
+7))
+SQL> create table sqcub(square int,cube int);
+
+Table created.
+
+SQL> DECLARE
+  2      i NUMBER:=1;
+  3      n integer;
+  4      k integer;
+  5      begin
+  6      dbms_output.put_line('Squares::');
+  7      loop
+  8      n:=i*i;
+  9      k:=i*i*i;
+ 10      i:=i+1;
+ 11      INSERT INTO sqcub(square,cube) VALUES (n,k);
+ 12      EXIT WHEN i>10;
+ 13      end loop;
+ 14      end;
+ 15      /
+
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from sqcub;
+
+    SQUARE       CUBE
+---------- ----------
+         1          1
+         4          8
+         9         27
+        16         64
+        25        125
+        36        216
+        49        343
+        64        512
+        81        729
+       100       1000
+
+10 rows selected.
+
+
+
+8))declare
+    cid number;
+   begin
+    cid := &cid;
+    update fish set eid=eid/2 where cid=id;
+    if(sql%notfound) then
+     dbms_output.put_line(' not found');
+    end if;
+   end;
+   /
+
+    
+   Enter value for cid: 3
+old   4:     cid := &cid;
+new   4:     cid := 3;
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from fish;
+
+NAME               ID        EID
+---------- ---------- ----------
+Packard             1        500
+Painter             2         10
+Taylor              3         35
+Watson              4         30
+Watson              5         50
+
+
+
+
+                 PROCEDURE
+              ----------------
+1))
+
+CREATE OR REPLACE PROCEDURE minimum(x in number, y in number, z out number) IS
+BEGIN 
+ IF x < y THEN 
+   z:= x; 
+ ELSE 
+   z:= y; 
+ END IF; 
+END;
+/
+DECLARE
+ a NUMBER := &a;
+ b NUMBER := &b;
+ c NUMBER;
+BEGIN
+   minimum(a, b, c); 
+   dbms_output.put_line(' Minimum of ('|| a ||','|| b ||') : ' || c); 
+END; 
+/
+
+
+Enter value for a: 10
+old   2:        a NUMBER := &a;
+new   2:        a NUMBER := 10;
+Enter value for b: 14
+old   3:        b NUMBER := &b;
+new   3:        b NUMBER := 14;
+Minimum of (10,14) : 10
+
+PL/SQL procedure successfully completed.
+
+
+2))
+
+CREATE OR REPLACE PROCEDURE bin(binval in char, result OUT NUMBER) IS
+  i NUMBER;
+  digits NUMBER;
+  present_digit CHAR(1);
+  dec_digit NUMBER;
+BEGIN
+  result := 0;
+  digits := LENGTH(binval);
+  FOR i IN 1 .. digits LOOP
+     present_digit := SUBSTR(binval, i, 1);
+     dec_digit := TO_NUMBER(present_digit);
+     result := (result * 2) + dec_digit;
+  END LOOP;
+END;
+/
+DECLARE
+  result NUMBER;
+BEGIN
+  bin(&binval,result);
+  dbms_output.put_line('Decimal value is: ' || result);
+END;
+/
+
+
+Enter value for binval: 1010
+old   4:        bin(&binval,result);
+new   4:        bin(1010,result);
+Decimal value is: 10
+
+PL/SQL procedure successfully completed.
+
+
+
+3))
+
+CREATE OR REPLACE PROCEDURE qdroot(A IN NUMBER, B IN NUMBER, C IN NUMBER) IS
+  D number := B * B - 4 * A * C;
+BEGIN
+  if A = 0 then
+    dbms_output.put_line('Not a quadratic equation.');
+    return;
+  end if;
+  if D = 0 then
+    dbms_output.put_line('x = ' || to_char(-B/2/A));
+  elsif D > 0 then
+    dbms_output.put_line('x1 = ' || to_char((-B-sqrt(D))/2/A));
+    dbms_output.put_line('x2 = ' || to_char((-B+sqrt(D))/2/A));
+  else
+    dbms_output.put_line('x1 = ' || to_char(-B/2/A) || ' + i(' || to_char(sqrt(-D)/2/A) || ')');
+    dbms_output.put_line('x2 = ' || to_char(-B/2/A) || ' - i(' || to_char(sqrt(-D)/2/A) || ')');
+  end if;
+END;
+/
+DECLARE
+  A number := '&A';
+  B number := '&B';
+  C number := '&C';
+BEGIN
+	qdroot(A,B,C);
+END;
+/
+
+
+Enter value for a: 1
+old   2:   A number := '&A';
+new   2:   A number := '1';
+Enter value for b: -5
+old   3:   B number := '&B';
+new   3:   B number := '-5';
+Enter value for c: 6
+old   4:   C number := '&C';
+new   4:   C number := '6';
+x1 = 2
+x2 = 3
+
+
+Enter value for a: 1
+old   2:   A number := '&A';
+new   2:   A number := '1';
+Enter value for b: 1
+old   3:   B number := '&B';
+new   3:   B number := '1';
+Enter value for c: 1
+old   4:   C number := '&C';
+new   4:   C number := '1';
+x1 = -.5 + i(.86602540378443864676372317075293618347)
+x2 = -.5 - i(.86602540378443864676372317075293618347)
+
+PL/SQL procedure successfully completed.
+
+
+4))
+
+SQL> CREATE TABLE SALARY(ID NUMBER, SALARY NUMBER);
+INSERT INTO SALARY VALUES(1,10000);
+INSERT INTO SALARY VALUES(2,30000);
+INSERT INTO SALARY VALUES(3,80000);
+INSERT INTO SALARY VALUES(4,40000);
+INSERT INTO SALARY VALUES(5,60000);
+
+CREATE OR REPLACE PROCEDURE hike(uid IN NUMBER) is
+sal NUMBER;
+BEGIN
+	select SALARY into sal from SALARY where ID=uid;
+	update SALARY set SALARY=SALARY*1.2 where ID=uid;
+	dbms_output.put_line('Salary updated');
+
+END;
+/
+
+DECLARE
+BEGIN
+	hike(&uid);
+END;
+/
+
+
+Enter value for uid: 4
+old   3:        hike(&uid);
+new   3:        hike(4);
+Salary updated
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from salary;
+
+        ID     SALARY
+---------- ----------
+         1      10000
+         2      30000
+         3      80000
+         4      48000
+         5      60000
+
+
+5))
+
+CREATE OR REPLACE PROCEDURE delstaff(uid IN NUMBER) is
+sal number;
+begin
+  select id into sal from staff where id=uid;
+  delete from staff where id=uid;
+  dbms_output.put_line('Row deleted');
+end;
+/
+
+DECLARE
+BEGIN
+    delstaff(&uid);
+END;
+/     
+
+
+  
+Enter value for uid: 6
+old   3:     delstaff(&uid);
+new   3:     delstaff(6);
+Row deleted
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from staff;
+
+
+NAME               ID
+---------- ----------
+jack                1
+jill                2
+jim                 3
+jerry               4
+jaison              5
+jerome              7
+
+6 rows selected.
+
+
+
+                 FUNCTIONS
+             ------------------
+                 
+
+1))
+
+
+DECLARE   
+   a number := &a;   
+   fac int;   
+    
+FUNCTION factorial(x number)   
+RETURN int   
+IS   
+   f int;   
+  
+BEGIN   
+   IF x = 0 THEN   
+      f := 1;   
+   ELSE   
+      f := x * factorial(x - 1);   
+   END IF;   
+RETURN f;   
+END;   
+    
+BEGIN   
+      
+   fac := factorial(a);   
+   dbms_output.put_line(' Factorial of  '|| a || ' is ' || fac);   
+END;
+/   
+
+
+Enter value for a: 6
+old   2:    a number := &a;
+new   2:    a number := 6;
+
+PL/SQL procedure successfully completed.
+
+2))
+
+
+declare 
+   
+    a number(8) := &a; 
+    c number(8); 
+    n number(8); 
+   rev number(8):=0; 
+    r number(8);
+    p number(8); 
+    
+function reverse_it( x  IN int)  
+return  int
+as 
+z int; 
+  
+begin 
+    n := x; 
+          
+    while (n > 0) 
+    loop 
+        r := mod(n, 10); 
+        rev := (rev * 10) + r; 
+        n := trunc(n / 10); 
+    end loop; 
+      
+    z := rev; 
+    return z; 
+         
+end  ;   
+  
+BEGIN   
+      
+   c := reverse_it(a);   
+   dbms_output.put_line('the reverse of number is  ' || c); 
+   
+   if c = a then
+        p := c;
+        dbms_output.put_line('It is a palindrome');
+   Else
+        dbms_output.put_line('It is not a palindrome');   
+   end if;
+END;
+/
+
+
+Enter value for a: 4567
+old   3:     a number(8) := &a;
+new   3:     a number(8) := 4567;
+the reverse of number is  7654
+It is not a palindrome
+
+PL/SQL procedure successfully completed.
+
+3))
+
+
+declare 
+    n number(8):= &n; 
+    s number:=0; 
+    r number; 
+    len number; 
+    m number; 
+
+function armstrong( x  IN int)  
+return  int
+as 
+s int; 
+   
+begin
+    m := n; 
+  
+    len := length(to_char(n)); 
+      
+    while n>0 
+    loop 
+        r := mod(n , 10); 
+        s := s + power(r , len); 
+        n := trunc(n / 10); 
+    end loop; 
+    return s;
+end;
+
+begin
+    if m = s 
+    then
+        dbms_output.put_line('It is an armstrong number'); 
+    else
+        dbms_output.put_line('It is not an armstrong number'); 
+    end if; 
+      
+end; 
+/
+
+Enter value for n: 153
+old   2:     n number(8):= &n;
+new   2:     n number(8):= 153;
+It is an armstrong number
+
+PL/SQL procedure successfully completed.
+
+3))
+
+declare 
+    n number(8):= &n; 
+    s number:=0; 
+    r number; 
+    len number; 
+    m number; 
+  
+begin
+    m := n; 
+  
+    len := length(to_char(n)); 
+      
+    while n>0 
+    loop 
+        r := mod(n , 10); 
+        s := s + power(r , len); 
+        n := trunc(n / 10); 
+    end loop; 
+
+
+    if m = s 
+    then
+        dbms_output.put_line('It is an armstrong number'); 
+    else
+        dbms_output.put_line('It is not an armstrong number'); 
+    end if; 
+end; 
+/
+
+
+4))
+
+
+DECLARE
+  a number := &a; 
+  x number;
+  n number;  
+  i number;  
+     
+  FUNCTION Findmax(n IN NUMBER)  
+    RETURN NUMBER  
+  IS 
+    sums NUMBER := 0;  
+  BEGIN 
+      
+    sums := (n*(n+1))/2; 
+    RETURN sums;  
+  END;  
+  BEGIN 
+            
+    x := findmax(a);  
+    dbms_output.Put_line('Sum: ' || x); 
+    INSERT INTO sum(numbers,sums) VALUES (a,x); 
+END;
+/
+
+
+SQL> select * from sum;
+
+   NUMBERS       SUMS
+---------- ----------
+         5         15
+        10         55
+        25        325
+
+
+5))
+DECLARE
+  a number := &a;
+  num number;
+  x number;
+
+function roots(num in number)
+ return number
+is
+begin
+  INSERT INTO root VALUES (num,sqrt(num),power(num,1/3));
+  return num;
+end;
+
+
+begin
+  x := roots(a);
+end;
+/
+
+Enter value for a: 1000
+old   2:   a number := &a;
+new   2:   a number := 1000;
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from root;
+
+   NUMBERS      SROOT      CROOT
+---------- ---------- ----------
+       125         11          5
+       500         22          8
+         9          3          2
+       100         10          5
+      1000         32         10
+
+
+
+
+                    TRIGGERS
+              -------------------
+
+
+1))
+
+CREATE OR REPLACE TRIGGER creditup 
+AFTER UPDATE OF credits ON course 
+FOR EACH ROW
+BEGIN
+dbms_output.put_line('old credit: ' || :old.credits);
+dbms_output.put_line('new credit: ' || :new.credits);
+END;
+/
+
+SQL> UPDATE course SET credits=9 WHERE course_id='CS-319';
+old credit: 3
+new credit: 9
+
+1 row updated.
+
+
+
+2))
+
+
+CREATE TABLE news(Id INT,Name VARCHAR(10),Old_Salary INT,new_salary INT);
+
+CREATE OR REPLACE TRIGGER sal_up 
+AFTER UPDATE OF salary ON instructor 
+FOR EACH ROW
+BEGIN
+INSERT INTO news VALUES(:old.id,:old.name,:old.salary,:new.salary);
+dbms_output.put_line('salary diff : '|| (:new.salary-:old.salary));
+END;
+/
+
+Trigger created.
+
+
+SQL> UPDATE instructor SET salary=50000 WHERE id='15151';
+salary diff : 10000
+
+1 row updated.
+
+SQL> SELECT * FROM news;
+
+        ID NAME       OLD_SALARY NEW_SALARY
+---------- ---------- ---------- ----------
+     15151 Mozart          40000      50000
+
+
+
+
+
+3))
+
+
+CREATE OR REPLACE TRIGGER cred 
+BEFORE INSERT ON course 
+FOR EACH ROW WHEN(new.credits<3)
+BEGIN
+RAISE_APPLICATION_ERROR(-20000,'Credits cannot be less than 3');
+END;
+/
+
+INSERT INTO course VALUES('eco-101','intro to economics','finance',2);
+
+INSERT INTO course VALUES('eco-101','intro to economics','finance',2)
+            *
+ERROR at line 1:
+ORA-20000: Credits cannot be less than 3
+ORA-06512: at "R502.CRED", line 2
+ORA-04088: error during execution of trigger 'R502.CRED'
+
+
+
+4))
+
+
+
+CREATE OR REPLACE TRIGGER del_takes 
+BEFORE DELETE ON takes 
+FOR EACH ROW WHEN(old.year = 2009 and old.semester='fall')
+BEGIN
+RAISE_APPLICATION_ERROR(-20000,'Cannot delete rows with YEAR = 2009 AND SEMESTER = FALL');
+END;
+/
+
+delete from takes where id=98765 AND course_id='CS-101';
+delete from takes where id=98765 AND course_id='CS-101'
+            *
+ERROR at line 1:
+ORA-20000: Cannot delete rows with YEAR = 2009 AND SEMESTER = FALL
+ORA-06512: at "R502.DEL_TAKES", line 2
+ORA-04088: error during execution of trigger 'R502.DEL_TAKES'
+
+5))
+
+
+
+DROP TRIGGER creditup;
+
+Trigger dropped.
+
+DROP TRIGGER sal_up;
+
+Trigger dropped.
+
+DROP TRIGGER cred;
+
+Trigger dropped.
+
+DROP TRIGGER del_takes;
+
+Trigger dropped.
+
+
+
+                    Cursors
+                ---------------
+
+
+1))
+
+
+DECLARE
+c_dept instructor.dept_name%type;
+c_name instructor.name%type;
+c_sal instructor.salary%type;
+a number;
+CURSOR c_instructor is
+SELECT dept_name, name, salary FROM instructor;
+BEGIN
+OPEN c_instructor;
+LOOP
+FETCH c_instructor into c_dept, c_name, c_sal;
+EXIT WHEN c_instructor%notfound;
+if c_sal < &a then
+dbms_output.put_line(c_dept || ' ' || c_name || ' ' || c_sal);
+end if;
+END LOOP;
+CLOSE c_instructor;
+END;
+/
+
+
+
+Enter value for a: 80000
+old  13: if c_sal < &a then
+new  13: if c_sal < 80000 then
+Comp.Sci. Srinivasan 65000
+Music Mozart 50000
+History El Said 60000
+Comp.Sci. Katz 75000
+History Califieri 62000
+Biology Crick 72000
+
+PL/SQL procedure successfully completed.
+
+
+2))
+
+
+declare
+c_dept instr_count.dept_name%type;
+c_inst instr_count.number_of_instr%type;
+c_course course_count.number_of_course%type;
+cursor c_count is select instr_count.dept_name,instr_count.number_of_instr,course_count.number_of_course from instr_count inner join course_count on instr_count.dept_name = course_count.dept_name;
+begin
+open c_count;
+loop
+fetch c_count into c_dept,c_inst,c_course;
+exit when c_count%notfound;
+dbms_output.put_line(c_dept||'   '||c_inst||'   '||c_course);
+end loop;
+close c_count;
+end;
+/
+
+Physics    2   1
+Comp.Sci   3   5
+Elec.Eng   1   1
+Finance    1   1
+Biology    1   3
+History    2   1
+Music      1   1
+
+
+3))
+
+
+DECLARE
+c_id instructor.id%type;
+c_name instructor.name%type;
+c_sal instructor.salary%type;
+b instructor.name%type;
+c instructor.id%type;
+a number;
+CURSOR c_inst is
+SELECT id, name, salary FROM instructor  order by salary desc;
+BEGIN
+OPEN c_inst;
+for a in 1 ..5
+loop
+FETCH c_inst into c_id, c_name, c_sal;
+EXIT WHEN c_inst%notfound;
+dbms_output.put_line(c_id || ' ' || c_name || ' ' || c_sal);
+end loop;
+CLOSE c_inst;
+END;
+/
+
+
+22222 Einstein 95000
+83821 Brandt 92000
+12121 Wu 90000
+33456 Gold 87000
+76543 Singh 80000
+
+PL/SQL procedure successfully completed.
+
+
+4))
+
+
+DECLARE
+c_id instructor.id%type;
+c_name instructor.name%type;
+c_sal instructor.salary%type;
+a number;
+CURSOR c_inst is
+SELECT id, name, salary FROM instructor ;
+BEGIN
+OPEN c_inst;
+loop
+FETCH c_inst into c_id, c_name, c_sal;
+EXIT WHEN c_inst%notfound;
+if c_sal < 80000 then
+c_sal:=1.2*c_sal;
+dbms_output.put_line(c_id || ' ' || c_name || ' ' || c_sal);
+else
+c_sal:=1.12*c_sal;
+dbms_output.put_line(c_id || ' ' || c_name || ' ' || c_sal);
+end if;
+end loop;
+CLOSE c_inst;
+END;
+/
+
+10101 Srinivasan 78000
+12121 Wu 100800
+15151 Mozart 60000
+22222 Einstein 106400
+32343 El Said 72000
+33456 Gold 97440
+45565 Katz 90000
+58583 Califieri 74400
+76543 Singh 89600
+76766 Crick 86400
+98345 Kim 89600
+83821 Brandt 103040
+
+PL/SQL procedure successfully completed.
+
+
+5))
+
+DECLARE
+id takes.id%type;
+cid takes.course_id%type;
+sid takes.sec_id%type;
+sem takes.semester%type;
+y takes.year%type;
+gr takes.grade%type;
+a number;
+CURSOR c_inst is
+SELECT id,course_id,sec_id,semester,year,grade  FROM takes where grade ='A';
+BEGIN
+a:=1;
+OPEN c_inst;
+loop
+FETCH c_inst into id, cid,sid,sem,y,gr;
+EXIT WHEN c_inst%notfound;
+dbms_output.put_line(id || ' ' ||cid || ' ' || sid || ' ' || sem || ' ' ||y
+|| ' ' ||gr);
+a:=a+1;
+end loop;
+dbms_output.put_line('row count ='||a);
+CLOSE c_inst;
+END;
+/
+
+
+128 CS-101     1 Fall 2009 A
+12345 CS-190     2 Spring 2009 A
+12345 CS-315     1 Spring 2010 A
+12345 CS-347     1 Fall 2009 A
+76543 CS-101     1 Fall 2009 A
+76543 CS-319     2 Spring 2010 A
+98988 BIO-101    1 Summer 2009 A
+row count =8
+
+PL/SQL procedure successfully completed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
