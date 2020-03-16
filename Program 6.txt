@@ -1,0 +1,104 @@
+create view yearview as select * from section where year=2009;
+
+View created.
+
+COURSE_ID      SEC_ID SEMESTER              YEAR BUILDING   ROOM_NUMBER
+---------- ---------- --------------- ---------- ---------- -----------
+BIO-101             1 Summer                2009 Painter            514
+CS-101              1 Fall                  2009 Packard            101
+CS-190              1 Spring                2009 Taylor            3128
+CS-190              2 Spring                2009 Taylor            3128
+CS-347              1 Fall                  2009 Taylor            3128
+EE-181              1 Spring                2009 Taylor            3128
+PHY-101             1 Fall                  2009 Watson             100
+
+create view studlist as select * from student order by name;
+
+View created.
+
+    ID NAME                 DEPT_NAME              TOT_CRED
+------ -------------------- -------------------- ----------
+ 76653 Aoi                  EEE                          60
+ 98765 Bourikas             EEE                          98
+ 19991 Brandt               History                      80
+ 76543 Brown                CS                           58
+ 23121 Chavez               Finance                     110
+   897 Hello                Biology                      99
+ 44553 John                 Physics                      56
+ 45678 Mozart               Physics                      56
+ 55739 Sanchez              Music                        48
+ 12345 Shankar              CS                           42
+ 98988 Tanaka               Biology                     120
+
+    ID NAME                 DEPT_NAME              TOT_CRED
+------ -------------------- -------------------- ----------
+ 54321 Williams             CS                           54
+   128 Zhang                CS                          102
+
+
+
+create view teacher as select id,name from instructor where id not in (select id from teaches);
+
+View created.
+
+    ID NAME
+------ ----------
+ 33456 Gold
+ 58583 Califieri
+
+insert into studlist(id,name) values (11111,'Saviour');
+
+
+     ID NAME                 DEPT_NAME              TOT_CRED
+------- -------------------- -------------------- ----------
+  76653 Aoi                  EEE                          60
+  98765 Bourikas             EEE                          98
+  19991 Brandt               History                      80
+  76543 Brown                CS                           58
+  23121 Chavez               Finance                     110
+    897 Hello                Biology                      99
+  44553 John                 Physics                      56
+  45678 Mozart               Physics                      56
+  55739 Sanchez              Music                        48
+  11111 Saviour
+  12345 Shankar              CS                           42
+
+     ID NAME                 DEPT_NAME              TOT_CRED
+------- -------------------- -------------------- ----------
+  98988 Tanaka               Biology                     120
+  54321 Williams             CS                           54
+    128 Zhang                CS                          102
+
+delete from student where id=11111;
+
+
+    ID NAME                 DEPT_NAME              TOT_CRED
+------ -------------------- -------------------- ----------
+ 76653 Aoi                  EEE                          60
+ 98765 Bourikas             EEE                          98
+ 19991 Brandt               History                      80
+ 76543 Brown                CS                           58
+ 23121 Chavez               Finance                     110
+   897 Hello                Biology                      99
+ 44553 John                 Physics                      56
+ 45678 Mozart               Physics                      56
+ 55739 Sanchez              Music                        48
+ 12345 Shankar              CS                           42
+ 98988 Tanaka               Biology                     120
+
+    ID NAME                 DEPT_NAME              TOT_CRED
+------ -------------------- -------------------- ----------
+ 54321 Williams             CS                           54
+   128 Zhang                CS                          102
+
+drop view yearview;
+
+View dropped.
+
+drop view studlist;
+
+View dropped.
+
+drop view teacher;
+
+View dropped.

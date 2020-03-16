@@ -1,0 +1,120 @@
+1
+create or replace procedure min
+(i in number ,j in number)
+as
+begin
+	if (i>j) then
+		dbms_output.put_line('minimum is '|| j);
+	elsif (i=j) then
+		dbms_output.put_line('Numbers are equal');
+	else
+		dbms_output.put_line('minimum is '|| i);
+	end if;
+end;
+/
+
+SQL> execute min(4,5);
+minimum is 4
+
+2
+create or replace procedure bin
+(b in number)
+as
+d number:=0;
+i number:=0;
+j number:=b;
+begin
+	while j>0 LOOP
+      		if mod(j,10)=1 THEN
+			d:=d+power(2,i);
+		end if;
+		j:=floor(j/10);
+		i:=i+1;
+	end loop;
+	dbms_output.put_line('Decimal value is '|| d);
+END;
+/
+
+SQL> execute bin(100);
+Decimal value is 4
+
+3
+create or replace procedure q
+(x in number,y in number ,z in number)
+as
+i number;
+c1 number;
+c2 number;
+begin
+	i:=(y*y)-(4*x*z);
+	if i>=0 then
+		c1:=((-y)+sqrt(i))/(2*x);
+		c2:=((-y)-sqrt(i))/(2*x);
+		if i=0 then
+			dbms_output.put_line('Roots are equal :'|| c1 ||' , '|| c2);
+		else
+			dbms_output.put_line('Roots are :'|| c1 ||' & '|| c2);
+		end if;
+	else
+		dbms_output.put_line('Roots are -ve');
+	end if;
+end;
+/
+
+SQL> execute q(1,2,1);
+Roots are equal :-1 , -1
+
+PL/SQL procedure successfully completed.
+
+SQL> execute q(1,4,1);
+Roots are :-.267949192431122706472553658494127633055 &
+-3.73205080756887729352744634150587236695
+
+PL/SQL procedure successfully completed.
+
+SQL> execute q(1,4,7);
+Roots are -ve
+
+4
+create or replace procedure inc
+(id2 in number)
+as
+t instructor%ROWTYPE;
+begin
+	update instructor set salary=salary+salary*0.2 where id=id2;
+	if sql%notfound then
+		dbms_output.put_line('Id not found');
+	else
+		dbms_output.put_line('New value for id is ' || id2);
+		select * into t from instructor where id=id2 ;
+		dbms_output.put_line('id: ' || t.id || '  Name: ' || t.name || '  new salary: '|| t.salary);
+	end if;
+end;
+/
+
+SQL> execute inc(10101);
+New value for id is 10101
+id: 10101  Name: Srinivasan  new salary: 90090
+
+5 
+create or replace procedure dlt
+(id2 in number)
+as
+t aaa%ROWTYPE;
+begin
+	select * into t from aaa where id=id2;
+	if sql%notfound then
+		dbms_output.put_line('Id not found');
+	else
+		dbms_output.put_line('Deleted id is ' || id2);
+		dbms_output.put_line('id: ' || id2 || '  Name: ' || t.name);
+	end if;
+	delete from aaa where id=id2;
+end;
+/
+
+SQL> execute dlt(123);
+Deleted id is 123
+id: 123  Name: abc
+
+

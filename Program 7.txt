@@ -1,0 +1,225 @@
+BUILTIN
+
+1
+SELECT ROUND(COS(ABS(-10)*EXP(2)),2) FROM DUAL;
+
+ROUND(COS(ABS(-10)*EXP(2)),2)
+-----------------------------
+                          .06
+
+SELECT ROUND(LOG(10,SQRT(POWER(5,4) / 14)),2) FROM DUAL;
+
+ROUND(LOG(10,SQRT(POWER(5,4)/14)),2)
+------------------------------------
+                                 .82
+
+SELECT SIN(30)+TAN(60),SIGN(SIN(30)+TAN(60)) FROM DUAL;
+
+SIN(30)+TAN(60) SIGN(SIN(30)+TAN(60))
+--------------- ---------------------
+     -.66799123                    -1
+
+
+2
+SELECT FLOOR(12.9),CEIL(12.9) FROM DUAL;
+
+FLOOR(12.9) CEIL(12.9)
+----------- ----------
+         12         13
+
+3
+SELECT LOWER(NAME),UPPER(NAME),INITCAP(NAME) FROM INSTRUCTOR;
+
+LOWER(NAME)     UPPER(NAME)     INITCAP(NAME)
+--------------- --------------- ---------------
+srinivasan      SRINIVASAN      Srinivasan
+wu              WU              Wu
+mozart          MOZART          Mozart
+einstein        EINSTEIN        Einstein
+el said         EL SAID         El Said
+gold            GOLD            Gold
+katz            KATZ            Katz
+califieri       CALIFIERI       Califieri
+crick           CRICK           Crick
+brandt          BRANDT          Brandt
+kim             KIM             Kim
+
+
+4
+SELECT REPLACE(COURSE_ID,'-','/') FROM COURSE;
+
+REPLACE(COURSE_
+---------------
+PHY/101
+
+5
+SELECT CONCAT(NAME,DAPT_NAME) FROM INSTRUCTOR;
+
+CONCAT(NAME,DAPT_NAME)
+-----------------------
+SrinivasanCS
+WuFinance
+MozartMusic
+EinsteinPhysics
+El saidHistory
+GoldPhysics
+KatzCS
+CalifieriHistory
+CrickBiology
+BrandtCS
+KimEEE
+
+6
+SELECT SUBSTR(ID,3,3) FROM INSTRUCTOR;
+
+SUB
+---
+101
+121
+151
+222
+343
+456
+565
+583
+766
+821
+345
+
+AGGREGATE
+
+1
+SELECT MAX(SALARY),MIN(SALARY),AVG(SALARY) FROM INSTRUCTOR;
+
+MAX(SALARY) MIN(SALARY) AVG(SALARY)
+----------- ----------- -----------
+     104500       46200       83295
+
+
+2
+SELECT sum(salary),MAX(SALARY),MIN(SALARY),AVG(SALARY) FROM INSTRUCTOR WHER
+E DAPT_NAME='History';
+
+SUM(SALARY) MAX(SALARY) MIN(SALARY) AVG(SALARY)
+----------- ----------- ----------- -----------
+     140910       71610       69300       70455
+
+
+3
+SELECT COUNT(ID) FROM INSTRUCTOR;
+
+ COUNT(ID)
+----------
+        11
+
+4
+SELECT COUNT(ID) FROM INSTRUCTOR WHERE DAPT_NAME='CS';
+
+ COUNT(ID)
+----------
+         3
+
+5
+SELECT COUNT(DISTINCT SALARY) FROM INSTRUCTOR;
+
+COUNT(DISTINCTSALARY)
+---------------------
+                   11
+
+HAVIND & GROUP BY
+
+1
+SELECT DAPT_NAME,COUNT(ID),AVG(SALARY) FROM INSTRUCTOR
+GROUP BY DAPT_NAME;
+
+DAPT_NAME   COUNT(ID) AVG(SALARY)
+---------- ---------- -----------
+Physics             2      100100
+EEE                 1       88000
+CS                  3  86258.3333
+Finance             1       99000
+Biology             1       83160
+Music               1       46200
+History             2       70455
+
+2
+SELECT COURSE_ID,SEMESTER,COUNT(ID) FROM TAKES
+GROUP BY COURSE_ID,SEMESTER;
+
+COURSE_ID  SEMESTER         COUNT(ID)
+---------- --------------- ----------
+FIN-201    Spring                   1
+CS-101     Spring                   1
+EE-181     Spring                   1
+CS-190     Spring                   2
+CS-315     Spring                   2
+HIS-351    Spring                   1
+CS-347     Fall                     2
+CS-319     Spring                   2
+BIO-301    Summer                   1
+PHY-101    Fall                     1
+CS-101     Fall                     6
+
+COURSE_ID  SEMESTER         COUNT(ID)
+---------- --------------- ----------
+BIO-101    Summer                   1
+MU-199     Spring                   1
+
+3
+SELECT COURSE_ID,SEMESTER,COUNT(ID) FROM TAKES
+GROUP BY COURSE_ID,SEMESTER
+HAVING COUNT(COURSE_ID)>2;
+
+COURSE_ID  SEMESTER         COUNT(ID)
+---------- --------------- ----------
+CS-101     Fall                     6
+
+4
+SELECT P.COURSE_ID,Q.NAME,COUNT(P.COURSE_ID)
+FROM TEACHES P,INSTRUCTOR Q
+WHERE P.ID=Q.ID
+GROUP BY P.COURSE_ID,Q.NAME;
+
+COURSE_ID  NAME            COUNT(P.COURSE_ID)
+---------- --------------- ------------------
+CS-315     Srinivasan                       1
+HIS-351    El said                          1
+BIO-301    Crick                            1
+CS-101     Katz                             1
+CS-347     Srinivasan                       1
+FIN-201    Wu                               1
+PHY-101    Einstein                         1
+CS-319     Katz                             1
+EE-181     Kim                              1
+BIO-101    Crick                            1
+CS-101     Srinivasan                       1
+
+COURSE_ID  NAME            COUNT(P.COURSE_ID)
+---------- --------------- ------------------
+MU-199     Mozart                           1
+CS-190     Brandt                           2
+CS-319     Brandt                           1
+
+5
+SELECT DAPT_NAME,COUNT(ID)
+FROM INSTRUCTOR
+GROUP BY DAPT_NAME,SALARY
+HAVING SALARY>80000;
+
+DAPT_NAME   COUNT(ID)
+---------- ----------
+Finance             1
+Physics             1
+CS                  1
+EEE                 1
+Physics             1
+CS                  1
+Biology             1
+
+
+
+
+
+
+
+

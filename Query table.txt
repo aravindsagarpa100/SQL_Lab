@@ -1,0 +1,787 @@
+SQL> Create table Classroom(building varchar(10),room_number int primary key,capacity int);
+
+Table created.
+
+SQL> Create table Department(dept_Name varchar(10) primary key,building varchar(10),budget int);
+
+Table created.
+
+SQL> Create table Course(course_id char(7) primary key,title varchar(10),dept_name varchar(10),credits int,foreign key(dept_name) references Department(dept_name));
+
+Table created.
+
+SQL> Create table Instructor(ID int primary key,name varchar(10),dept_name varchar(10),salary int,foreign key(dept_name) references Department(dept_name));
+
+Table created.
+
+SQL> Create table Student(ID int primary key,name varchar(10),dept_name varchar(10),tot_cred int,foreign key(dept_name) references Department(dept_name));
+
+Table created.
+
+SQL> Create table Section(course_id char(7),sec_id int,semester int,year int,building varchar(10),room_number int,foreign key(course_id) references Course(course_id));
+
+Table created.
+
+SQL> Create table Teaches(ID int,course_id char(10),sec_id int,semester int,year int);
+
+Table created.
+
+SQL> Create table Takes(ID int,course_id char(7),sec_id int,semester varchar(6),year int,grade char(4),foreign key(course_id) references Course(course_id));
+
+Table created.
+
+
+ MODIFY
+
+(1) SQL> alter table Course modify course_id varchar(10);
+
+Table altered.
+
+SQL> desc Course
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ------------
+
+ COURSE_ID                                 NOT NULL VARCHAR2(10)
+ TITLE                                              VARCHAR2(10)
+ DEPT_NAME                                          VARCHAR2(10)
+ CREDITS                                            NUMBER(38)
+
+SQL> alter table Department add dept_no number;
+
+Table altered.
+
+(2) SQL> desc Department
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ------------
+
+ DEPT_NAME                                 NOT NULL VARCHAR2(10)
+ BUILDING                                           VARCHAR2(10)
+ BUDGET                                             NUMBER(38)
+ DEPT_NO                                            NUMBER
+
+(3) SQL> alter table Student modify name varchar(10) not null;
+
+Table altered.
+
+SQL> desc Student
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ------------
+
+ ID                                        NOT NULL NUMBER(38)
+ NAME                                      NOT NULL VARCHAR2(10)
+ DEPT_NAME                                          VARCHAR2(10)
+ TOT_CRED                                           NUMBER(38)
+
+SQL> alter table Classroom modify capacity int default 50;
+
+Table altered.
+
+SQL> insert into Classroom values ('Pac',1041,default);
+
+1 row created.
+
+SQL> select * from Classroom;
+
+BUILDING   ROOM_NUMBER   CAPACITY
+---------- ----------- ----------
+Packard            101        500
+Taylor             100
+Pac               1041         50
+
+(4) SQL> desc Classroom
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ------------
+
+ BUILDING                                           VARCHAR2(10)
+ ROOM_NUMBER                               NOT NULL NUMBER(38)
+ CAPACITY                                           NUMBER(38)
+
+(5) SQL> alter table Department add constraint uniq dept_Name varchar(10) unique;
+
+ORA-01430: column being added already exists in table
+
+
+(6) SQL> alter table Instructor modify salary check (salary>50000);
+
+Table altered.
+
+SQL> desc Instructor
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ------------
+
+ ID                                        NOT NULL NUMBER(38)
+ NAME                                               VARCHAR2(10)
+ DEPT_NAME                                          VARCHAR2(10)
+ SALARY                                             NUMBER(38)
+
+
+Eg:
+SQL> insert into Instructor values (10101,'Srinivasan','Computer',45000);
+insert into Instructor values (10101,'Srinivasan','Computer',45000)
+*
+ERROR at line 1:
+ORA-02290: check constraint (R502.SYS_C0012247) violated
+
+(7) SQL> alter table Takes rename to subject;
+
+Table altered.
+
+SQL> desc Takes
+ERROR:
+ORA-04043: object Takes does not exist
+
+
+SQL> desc Subject
+ Name                                      Null?    Type
+ ----------------------------------------- -------- -----------
+
+ ID                                                 NUMBER(38)
+ COURSE_ID                                          CHAR(10)
+ SEC_ID                                             NUMBER(38)
+ SEMESTER                                           NUMBER(38)
+ YEAR                                               NUMBER(38)
+ GRADE                                              CHAR(4)
+
+
+DML
+
+INSERT INTO classroom VALUES('Packard',101,500);
+INSERT INTO classroom VALUES('Painter',514,10);
+INSERT INTO classroom VALUES('Taylor',3128,70);
+INSERT INTO classroom VALUES('Watson',100,30);
+INSERT INTO classroom VALUES('Watson',120,50);
+
+INSERT INTO department VALUES('Biology','Watson',90000);
+INSERT INTO department VALUES('Comp Sci','Taylor',100000);
+INSERT INTO department VALUES('Elec eng','Taylor',85000);
+INSERT INTO department VALUES('Finance','Painter',120000);
+INSERT INTO department VALUES('History','Painter',50000);
+INSERT INTO department VALUES('MUsic','Packard',80000);
+INSERT INTO department VALUES('Physics','Watson',70000);
+
+INSERT INTO course VALUES('Bio-101','Intro to biology','Biology',4);
+INSERT INTO course VALUES('Bio-301','Genetics','Biology',4);
+INSERT INTO course VALUES('Bio-399','Computational biology','Biology',3);
+INSERT INTO course VALUES('CS-101','Intro to Computer science','Comp Sci',4);
+INSERT INTO course VALUES('CS-190','Game design','Comp Sci',4);
+INSERT INTO course VALUES('CS-315','Robotics','Comp Sci',3);
+INSERT INTO course VALUES('CS-319','Image processing','Comp Sci',3);
+INSERT INTO course VALUES('CS-347','Database design concept','Comp Sci',3);
+INSERT INTO course VALUES('EE-187','Intro to digital system','Elec eng',3);
+INSERT INTO course VALUES('FIN-201','Investment banking','Finance',3);
+INSERT INTO course VALUES('HIS-351','World History','History',3);
+INSERT INTO course VALUES('MU-199','Music video production','MUsic',3);
+INSERT INTO course VALUES('PHY-101','Physical principles','Physics',4);
+
+INSERT INTO Instructor VALUES(10101,'Srinivasan','Comp Sci',65000);
+INSERT INTO Instructor VALUES(12121,'Wu','Finance',90000);
+INSERT INTO Instructor VALUES(15151,'Mozart','MUsic',40000);
+INSERT INTO Instructor VALUES(&ID,&name,&dept_name,&salary);
+
+INSERT INTO Instructor VALUES(76766,'Crick','Biology',80000);
+INSERT INTO Instructor VALUES(83821,'Brandt','Comp Sci',92000);
+INSERT INTO Instructor VALUES(93845,'Kim','Elec eng',80000);
+
+INSERT INTO Student VALUES(00128,'Zhang','Comp Sci',102);
+INSERT INTO Student VALUES(12345,'Shankar','Comp Sci',32);
+INSERT INTO Student VALUES(19991,'Brandt','History',80);
+INSERT INTO Student VALUES(23121,'Chavez','Finance',110);
+INSERT INTO Student VALUES(44553,'Peltier','Physics',56);
+INSERT INTO Student VALUES(45678,'Levy','Physics',46);
+INSERT INTO Student VALUES(54321,'Williams','Comp Sci',54);
+INSERT INTO Student VALUES(55739,'Sanchez','MUsic',38);
+INSERT INTO Student VALUES(70557,'Snow','Physics',0);
+INSERT INTO Student VALUES(76543,'Brown','Comp Sci',58);
+INSERT INTO Student VALUES(76653,'Aoi','Elec eng',60);
+INSERT INTO Student VALUES(98765,'Bourikas','Elec eng',98);
+INSERT INTO Student VALUES(98988,'Tanaka','Biology',120);
+
+INSERT INTO Section VALUES('Bio-101',1,'Summer',2009,'Painter',514);
+INSERT INTO Section VALUES('Bio-101',1,'Summer',2010,'Painter',514);
+INSERT INTO Section VALUES('CS-101',1,'Fall',2009,'Packard',101);
+INSERT INTO Section VALUES('CS-101',1,'Spring',2010,'Packard',101);
+INSERT INTO Section VALUES('CS-190',1,'Spring',2009,'Taylor',3128);
+INSERT INTO Section VALUES('CS-190',2,'Spring',2009,'Taylor',3128);
+INSERT INTO Section VALUES('CS-315',1,'Spring',2010,'Watson',120);
+INSERT INTO Section VALUES('CS-319',1,'Spring',2010,'Watson',100);
+INSERT INTO Section VALUES('CS-319',2,'Spring',2010,'Taylor',3128);
+INSERT INTO Section VALUES('CS-347',1,'Fall',2009,'Taylor',3128);
+INSERT INTO Section VALUES('EE-187',1,'Spring',2009,'Taylor',3128);
+INSERT INTO Section VALUES('FIN-201',1,'Spring',2010,'Packard',101);
+INSERT INTO Section VALUES('HIS-351',1,'Spring',2010,'Painter',514);
+INSERT INTO Section VALUES('MU-199',1,'Spring',2010,'Packard',101);
+INSERT INTO Section VALUES('PHY-101',1,'Fall',2009,'Watson',100);
+
+INSERT INTO Teaches VALUES(10101,'CS-101',1,'Fall',2009);
+INSERT INTO Teaches VALUES(10101,'CS-315',1,'Spring',2010);
+INSERT INTO Teaches VALUES(10101,'CS-347',1,'Fall',2009);
+INSERT INTO Teaches VALUES(12121,'FIN-201',1,'Spring',2010);
+INSERT INTO Teaches VALUES(15151,'MU-199',1,'Spring',2010);
+INSERT INTO Teaches VALUES(22222,'PHY-101',1,'Fall',2009);
+INSERT INTO Teaches VALUES(32343,'HIS-351',1,'Spring',2010);
+INSERT INTO Teaches VALUES(45565,'CS-101',1,'Spring',2010);
+INSERT INTO Teaches VALUES(45565,'CS-319',1,'Spring',2010);
+INSERT INTO Teaches VALUES(76766,'Bio-101',1,'Summer',2009);
+INSERT INTO Teaches VALUES(76766,'Bio-301',1,'Summer',2010);
+INSERT INTO Teaches VALUES(83821,'CS-190',1,'Spring',2009);
+INSERT INTO Teaches VALUES(83821,'CS-190',2,'Spring',2009);
+INSERT INTO Teaches VALUES(83821,'CS-319',2,'Spring',2010);
+INSERT INTO Teaches VALUES(98345,'EE-187',1,'Spring',2009);
+
+INSERT INTO Takes VALUES(00128,'CS-101',1,'Fall',2009,'A');
+INSERT INTO Takes VALUES(00128,'CS-347',1,'Fall',2009,'A-');
+INSERT INTO Takes VALUES(12345,'CS-101',1,'Fall',2009,'C');
+INSERT INTO Takes VALUES(12345,'CS-190',2,'Spring',2009,'A');
+INSERT INTO Takes VALUES(12345,'CS-315',1,'Spring',2010,'A');
+INSERT INTO Takes VALUES(12345,'CS-347',1,'Fall',2009,'A');
+INSERT INTO Takes VALUES(19991,'HIS-351',1,'Spring',2010,'B');
+INSERT INTO Takes VALUES(23121,'FIN-201',1,'Spring',2010,'C+');
+INSERT INTO Takes VALUES(44553,'PHY-101',1,'Fall',2009,'B-');
+INSERT INTO Takes VALUES(45678,'CS-101',1,'Fall',2009,'F');
+INSERT INTO Takes VALUES(45678,'CS-101',1,'Spring',2010,'B+');
+INSERT INTO Takes VALUES(45678,'CS-319',1,'Spring',2010,'B');
+INSERT INTO Takes VALUES(54321,'CS-101',1,'Fall',2009,'A-');
+INSERT INTO Takes VALUES(54321,'CS-190',2,'Spring',2009,'B+');
+INSERT INTO Takes VALUES(55739,'MU-199',1,'Spring',2010,'A-');
+INSERT INTO Takes VALUES(76543,'CS-101',1,'Fall',2009,'A');
+INSERT INTO Takes VALUES(76543,'CS-319',2,'Spring',2010,'A');
+INSERT INTO Takes VALUES(76653,'EE-187',1,'Spring',2009,'C');
+INSERT INTO Takes VALUES(98765,'CS-101',1,'Fall',2009,'C-');
+INSERT INTO Takes VALUES(98765,'CS-315',1,'Spring',2010,'B');
+INSERT INTO Takes VALUES(98988,'Bio-101',1,'Summer',2009,'A');
+INSERT INTO Takes VALUES(98988,'Bio-301',1,'Summer',2010,null);
+
+
+
+
+2.a)UPDATE student SET name = 'Mozart' WHERE ID=45678;
+1 row updated.
+
+  b)UPDATE department SET building='Taylor',budget=10000 WHERE dept_name='History';
+1 row updated.
+
+  c)UPDATE Instructor SET salary=salary*1.1;
+11 rows updated.
+
+  d)UPDATE course SET credits=4 WHERE dept_name='Comp.Sci.';
+5 rows updated.
+
+  e)UPDATE student SET tot_cred=tot_cred+10 WHERE tot_cred BETWEEN 20 AND 50;
+3 rows updated.
+
+  f)UPDATE Instructor SET salary=salary*1.05 WHERE salary<(SELECT AVG(salary) FROM instructor);
+5 rows updated.
+
+  g)UPDATE teaches SET year=2010 WHERE course_id='CS-101' AND semester='Fall';
+1 rows updated.
+
+3.DELETE FROM student WHERE tot_cred=0;
+1 row deleted.
+
+4.DELETE FROM instructor WHERE id LIKE '765%';
+1 row deleted.
+
+5.DELETE FROM course WHERE course_id NOT IN (SELECT DISTINCT course_id FROM section);
+1 row deleted.
+
+
+
+   DQL COMMANDS
+--------------------
+
+
+1.SQL> SELECT name,dept_name FROM instructor;
+
+NAME       DEPT_NAME
+---------- ----------
+Srinivasan Comp.Sci.
+Wu         Finance
+Mozart     Music
+Einstein   Physics
+El Said    History
+Gold       Physics
+Katz       Comp.Sci.
+Califieri  History
+Singh      Finance
+Crick      Biology
+Kim        Elec.Engg
+
+NAME       DEPT_NAME
+---------- ----------
+Brandt     Comp.Sci.
+
+
+
+2.SQL> SELECT DISTINCT semester FROM teaches;
+
+SEMESTER
+----------
+Spring
+Summer
+Fall
+
+3.SQL> SELECT name,salary*1.1 AS salary_increase FROM instructor;
+
+NAME       SALARY_INCREASE
+---------- ---------------
+Srinivasan           71500
+Wu                   99000
+Mozart               44000
+Einstein            104500
+El Said              66000
+Gold                 95700
+Katz                 82500
+Califieri            68200
+Singh                88000
+Crick                79200
+Kim                  88000
+
+NAME       SALARY_INCREASE
+---------- ---------------
+Brandt              101200
+
+4.SQL> SELECT id,name FROM instructor WHERE salary>1000 AND dept_name='Comp.Sci.';
+
+
+        ID NAME
+---------- ----------
+     10101 Srinivasan
+     45565 Katz
+     83821 Brandt
+
+
+5.SQL> SELECT name,instructor.dept_name,building FROM instructor,department WHERE
+department.dept_name=instructor.dept_name;
+
+NAME       DEPT_NAME  BUILDING
+---------- ---------- ----------
+Crick      Biology    Watson
+Srinivasan Comp.Sci.  Taylor
+Brandt     Comp.Sci.  Taylor
+Katz       Comp.Sci.  Taylor
+Wu         Finance    Painter
+Singh      Finance    Painter
+Califieri  History    Painter
+El Said    History    Painter
+Mozart     Music      Packard
+Einstein   Physics    Watson
+Gold       Physics    Watson
+
+6.SQL> SELECT DISTINCT name,course_id FROM instructor,teaches WHERE instructor.dep
+t_name='Comp.Sci.' AND instructor.id=teaches.id;
+
+NAME       COURSE_ID
+---------- ----------
+Brandt     CS-319
+Katz       CS-101
+Katz       CS-319
+Srinivasan CS-101
+Srinivasan CS-315
+Srinivasan CS-347
+Brandt     CS-190
+
+7.SQL> SELECT * FROM course WHERE title LIKE 'Intro%';
+
+COURSE_ID  TITLE                          DEPT_NAME     CREDITS
+---------- ------------------------------ ---------- ----------
+Bio-101    Intro. to biology              Biology             4
+CS-101     Intro. to Computer Science     Comp.Sci            4
+EE-181     Intro to digital systems       Elec.Engg           3
+
+
+8.SQL> SELECT * FROM course WHERE title LIKE '%Comp%';
+
+COURSE_ID  TITLE                          DEPT_NAME     CREDITS
+---------- ------------------------------ ---------- ----------
+Bio-399    Computational biology          Biology             3
+CS-101     Intro. to Computer Science     Comp.Sci            4
+
+
+9.SQL> SELECT * FROM student WHERE name LIKE '___';
+
+        ID NAME       DEPT_NAME    TOT_CRED
+---------- ---------- ---------- ----------
+     76653 Aoi        Elec.Engg          60
+
+10.SQL> SELECT * FROM Instructor WHERE name LIKE '___%';
+
+        ID NAME       DEPT_NAME      SALARY
+---------- ---------- ---------- ----------
+     10101 Srinivasan Comp.Sci.       65000
+     15151 Mozart     Music           40000
+     22222 Einstein   Physics         95000
+     32343 El Said    History         60000
+     33456 Gold       Physics         87000
+     45565 Katz       Comp.Sci.       75000
+     58583 Califieri  History         62000
+     76543 Singh      Finance         80000
+     76766 Crick      Biology         72000
+     98345 Kim        Elec.Engg       80000
+     83821 Brandt     Comp.Sci.       92000
+
+
+
+          DCL commands
+         --------------
+
+1.SQL> GRANT SELECT ON department TO PUBLIC;
+
+Grant succeeded.
+
+2.SQL> GRANT ALL ON department TO PUBLIC;
+
+Grant succeeded.
+
+3.SQL> REVOKE ALL ON department FROM PUBLIC;
+
+Revoke succeeded.
+
+         TCL commands
+      ------------------  
+
+
+1.SQL> Update student set name='John' where id=44553;
+
+1 row updated.
+
+2.SQL> commit;
+
+Commit complete.
+
+3.SQL> update student set name='petlier' where id=44553;
+
+1 row updated.
+
+4. SQL> rollback;
+
+Rollback complete.
+
+
+       VIEWS
+     ----------
+
+1.SQL> create view yearlist as select * from course;
+
+View created.
+
+
+SQL> desc yearlist;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- --------------------
+
+ COURSE_ID                                 NOT NULL CHAR(10)
+ TITLE                                              VARCHAR2(30)
+ DEPT_NAME                                          VARCHAR2(10)
+ CREDITS  
+
+
+                                          NUMBER(38)
+2.SQL> create view studentlist as select * from student order by name;
+
+View created.
+
+
+ SQL> desc studentlist;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- --------------------
+
+ ID                                        NOT NULL NUMBER(38)
+ NAME                                               VARCHAR2(10)
+ DEPT_NAME                                          VARCHAR2(10)
+ TOT_CRED                                           NUMBER(38)
+
+
+
+3.SQL> create view teacher as select * from instructor where id not in (select id
+from teaches);
+
+SQL> insert into student list values(10000,'Raj','Finance',120);
+
+  1 row created.
+
+4.SQL> update studentlist set name ='samson' where id=10000;
+
+  1 row updated.
+
+5.SQL> delete from studentlist where id=10000;
+
+  1 row deleted.
+
+6.SQL> drop view yearlist;
+
+View dropped.
+
+
+SQL> drop view studentlist;
+
+View dropped.
+
+SQL> drop view teacher;
+
+View dropped.
+
+
+
+     
+        BUILT-IN FUNCTIONS
+      -------------------------
+
+1.a)SQL> select COS(ABS(-10)*EXP(2)) from dual;
+
+COS(ABS(-10)*EXP(2))
+--------------------
+          .063091698
+
+ b)SQL> select ROUND(LOG(10,(SQRT(mod(power(5,4),14)))),2) from dual;
+
+ROUND(LOG(10,(SQRT(MOD(POWER(5,4),14)))),2)
+-------------------------------------------
+                                        .48
+
+
+ c)SQL> select SIN(30)+TAN(60) from dual;
+
+SIN(30)+TAN(60)
+---------------
+     -.66799123
+
+2.SQL> select CEIL(12.9) from dual;
+
+CEIL(12.9)
+----------
+        13
+
+3.SQL> select UPPER(name) from instructor;
+
+UPPER(NAME
+----------
+SRINIVASAN
+WU
+MOZART
+EINSTEIN
+EL SAID
+GOLD
+KATZ
+CALIFIERI
+SINGH
+CRICK
+KIM
+
+UPPER(NAME
+----------
+BRANDT
+
+
+SQL> select LOWER(name) from instructor;
+
+LOWER(NAME
+----------
+srinivasan
+wu
+mozart
+einstein
+el said
+gold
+katz
+califieri
+singh
+crick
+kim
+
+LOWER(NAME
+----------
+brandt
+
+4.SQL> select REPLACE(course_id,'-','/') from course;
+
+REPLACE(CO
+----------
+Bio/101
+Bio/301
+Bio/399
+CS/101
+CS/190
+CS/315
+CS/319
+CS/347
+EE/181
+FIN/201
+HIS/351
+
+REPLACE(CO
+----------
+MU/199
+PHY/101
+
+5.SQL> select concat(name,dept_name) from instructor;
+
+CONCAT(NAME,DEPT_NAM
+--------------------
+SrinivasanComp.Sci.
+WuFinance
+MozartMusic
+EinsteinPhysics
+El SaidHistory
+GoldPhysics
+KatzComp.Sci.
+CalifieriHistory
+SinghFinance
+CrickBiology
+KimElec.Engg
+
+CONCAT(NAME,DEPT_NAM
+--------------------
+BrandtComp.Sci.
+
+
+
+6.SQL> select substr((course_id),5,3) as last  from section;
+
+LAS
+---
+101
+301
+01
+01
+90
+90
+15
+19
+19
+47
+81
+
+LAS
+---
+201
+351
+99
+101
+
+
+
+   AGGREGATE FUNCTIONS
+----------------------------
+
+
+1.SQL> SELECT sum(salary) from instructor;
+
+SUM(SALARY)
+-----------
+     898000
+
+SQL> SELECT max(salary) from instructor;
+
+MAX(SALARY)
+-----------
+      95000
+
+SQL> SELECT min(salary) from instructor;
+
+MIN(SALARY)
+-----------
+      40000
+
+SQL> SELECT avg(salary) from instructor;
+
+AVG(SALARY)
+-----------
+ 74833.3333
+
+
+2.SQL> SELECT sum(salary) from instructor where dept_name='History';
+
+SUM(SALARY)
+-----------
+     122000
+
+SQL> SELECT max(salary) from instructor where dept_name='History';
+
+MAX(SALARY)
+-----------
+      62000
+
+SQL> SELECT min(salary) from instructor where dept_name='History';
+
+MIN(SALARY)
+-----------
+      60000
+
+SQL> SELECT avg(salary) from instructor where dept_name='History';
+
+AVG(SALARY)
+-----------
+      61000
+
+
+3.SQL> SELECT count(name) from instructor;
+
+COUNT(NAME)
+-----------
+         12
+
+
+4.SQL> SELECT count(name) from instructor where dept_name='Comp.Sci.';
+
+COUNT(NAME)
+-----------
+          3
+
+
+5.SQL> SELECT count(DISTINCT salary) from instructor;
+
+COUNT(DISTINCTSALARY)
+---------------------
+                   11
+
+
+    HAVING AND GROUP BY
+------------------------------
+
+
+1.SQL> select dept_name,COUNT(name),avg(salary) from instructor group by dept_name;
+
+DEPT_NAME  COUNT(NAME) AVG(SALARY)
+---------- ----------- -----------
+Physics              2       91000
+Elec.Engg            1       80000
+Finance              2       85000
+Comp.Sci.            3       77333.3333
+Biology              1       72000
+Music                1       40000
+History              2       61000
+
+
+2.SQL> select course_id,semester,COUNT(sec_id) from section group by course_id,semester;
+
+COURSE_ SEMESTER   COUNT(SEC_ID)
+------- ---------- -------------
+CS-101  Fall                   1
+CS-190  Spring                 2
+CS-315  Spring                 1
+CS-347  Fall                   1
+FIN-201 Spring                 1
+CS-319  Spring                 2
+CS-101  Spring                 1
+EE-181  Spring                 1
+HIS-351 Spring                 1
+BIO-301 Summer                 1
+MU-199  Spring                 1
+
+COURSE_ SEMESTER   COUNT(SEC_ID)
+------- ---------- -------------
+PHY-101 Fall                   1
+BIO-101 Summer                 1
+
+
+3.SQL> select course_id,semester,COUNT(sec_id) from takes group by course_id,semester having count(DISTINCT id) >2;
+
+COURSE_ID  SEMESTER   COUNT(SEC_ID)
+---------- ---------- -------------
+CS-101     Fall                   6
+
+
+4.
+
+
+5.

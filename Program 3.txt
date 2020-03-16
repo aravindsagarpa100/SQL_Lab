@@ -1,0 +1,115 @@
+select name,dapt_name from instructor;
+
+NAME            DAPT_NAME
+--------------- ----------
+Srinivasan      CS
+Wu              Finance
+Mozart          Music
+Einstein        Physics
+El said         History
+Gold            Physics
+Katz            CS
+Califieri       History
+Crick           Biology
+Brandt          CS
+Kim             EEE
+
+select distinct semester from teaches;
+
+
+SEMESTER
+---------------
+Spring
+Summer
+Fall
+
+select name,salary+(0.1*salary) from instructor;
+
+NAME            SALARY+(0.1*SALARY)
+--------------- -------------------
+Srinivasan                  82582.5
+Wu                           108900
+Mozart                        50820
+Einstein                     114950
+El said                       76230
+Gold                         105270
+Katz                          90750
+Califieri                     78771
+Crick                         91476
+Brandt                       111320
+Kim                           96800
+
+select id,name from instructor where salary>70000 and dapt_name='CS';
+
+
+       ID NAME
+--------- ---------------
+    10101 Srinivasan
+    45565 Katz
+    83821 Brandt
+
+
+select i.name,i.dapt_name,d.building from instructor i,department d
+where i.dapt_name=d.dept_name;
+
+
+NAME            DAPT_NAME  BUILDING
+--------------- ---------- ----------
+Srinivasan      CS         Taylor
+Wu              Finance    Painter
+Mozart          Music      Packard
+Katz            CS         Taylor
+Crick           Biology    Watson
+Brandt          CS         Taylor
+
+select i.name,t.id from instructor i,teaches t where i.id=t.id and i.dapt_
+name='CS';
+
+NAME                    ID
+--------------- ----------
+Srinivasan           10101
+Srinivasan           10101
+Srinivasan           10101
+Katz                 45565
+Katz                 45565
+Brandt               83821
+Brandt               83821
+Brandt               83821
+
+select * from course where title like 'Intro%';
+
+COURSE_ID       TITLE                DEPT_NAME     CREDITS
+--------------- -------------------- ---------- ----------
+BIO-101         Intro.to.Bio         Biology             4
+CS-101          Intro to CS          CS                  4
+EE-181          Intro to dig.systems EEE                 3
+
+select * from course where title like '%Comp%';
+
+COURSE_ID       TITLE                DEPT_NAME     CREDITS
+--------------- -------------------- ---------- ----------
+BIO-399         Computational.Bio    Biology             3
+
+select * from student where name like '___';
+
+
+     ID NAME                 DEPT_NAME              TOT_CRED
+------- -------------------- -------------------- ----------
+  76653 Aoi                  EEE                          60
+
+
+select * from instructor where name like '___%';
+
+
+    ID NAME            DAPT_NAME      SALARY
+------ --------------- ---------- ----------
+ 10101 Srinivasan      CS              75075
+ 15151 Mozart          Music           46200
+ 22222 Einstein        Physics        104500
+ 32343 El said         History         69300
+ 33456 Gold            Physics         95700
+ 45565 Katz            CS              82500
+ 58583 Califieri       History         71610
+ 76766 Crick           Biology         83160
+ 83821 Brandt          CS             101200
+ 98345 Kim             EEE             88000

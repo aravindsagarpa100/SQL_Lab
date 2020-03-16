@@ -1,0 +1,27 @@
+update student set name='Mozart' where id=45678;
+update instructor set salary=salary*1.1;
+update course set credits=4 where dept_name='CS';
+update student set tot_cred=tot_cred+10 where tot_cred between 20 and 50;
+update instructor set salary=salary+(0.05*salary) where salary <(select avg(salary) from instructor);
+update teaches set year=2010 where course_id='CS-101' AND semester='Fall';
+delete student where tot_cred=0;
+delete instructor where id LIKE '765%';
+
+delete from course where course_id not in (select distinct course_id from section);
+COURSE_ID       TITLE                DEPT_NAME     CREDITS
+--------------- -------------------- ---------- ----------
+BIO-101         Intro.to.Bio         Biology             4
+BIO-301         Genetics             Biology             4
+CS-101          Intro to CS          CS                  4
+CS-190          Game design          CS                  4
+CS-315          Robotics             CS                  4
+CS-319          Image processing     CS                  4
+CS-347          DB system concepts   CS                  4
+EE-181          Intro to dig.systems EEE                 3
+FIN-201         Investment banking   Finance             3
+HIS-351         World history        History             3
+MU-199          Music video prod.    Music               3
+
+COURSE_ID       TITLE                DEPT_NAME     CREDITS
+--------------- -------------------- ---------- ----------
+PHY-101         Physical productions Physics             4

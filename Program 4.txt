@@ -1,0 +1,11 @@
+grant select on classroom to public;
+
+Grant succeeded.
+
+grant all on classroom to public;
+
+Grant succeeded.
+
+revoke all on classroom from public;
+
+Revoke succeeded.

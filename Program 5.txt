@@ -1,0 +1,177 @@
+update student set name='John' where id=44553;
+
+
+    ID NAME                 DEPT_NAME              TOT_CRED
+------ -------------------- -------------------- ----------
+   897 Hello                Biology                      99
+   128 Zhang                CS                          102
+ 12345 Shankar              CS                           42
+ 19991 Brandt               History                      80
+ 23121 Chavez               Finance                     110
+ 44553 John                 Physics                      56
+ 45678 Mozart               Physics                      56
+ 54321 Williams             CS                           54
+ 55739 Sanchez              Music                        48
+ 76543 Brown                CS                           58
+ 76653 Aoi                  EEE                          60
+
+    ID NAME                 DEPT_NAME              TOT_CRED
+------ -------------------- -------------------- ----------
+ 98765 Bourikas             EEE                          98
+ 98988 Tanaka               Biology                     120
+
+commit;
+
+Commit complete.
+
+update student set name='Peltier' where id=44553;
+
+
+     ID NAME                 DEPT_NAME              TOT_CRED
+------- -------------------- -------------------- ----------
+    897 Hello                Biology                      99
+    128 Zhang                CS                          102
+  12345 Shankar              CS                           42
+  19991 Brandt               History                      80
+  23121 Chavez               Finance                     110
+  44553 Peltier              Physics                      56
+  45678 Mozart               Physics                      56
+  54321 Williams             CS                           54
+  55739 Sanchez              Music                        48
+  76543 Brown                CS                           58
+  76653 Aoi                  EEE                          60
+
+     ID NAME                 DEPT_NAME              TOT_CRED
+------- -------------------- -------------------- ----------
+  98765 Bourikas             EEE                          98
+  98988 Tanaka               Biology                     120
+
+rollback;
+
+Rollback complete.
+
+insert into student values(0898,'Hello','Biology',99);
+
+
+    ID NAME                 DEPT_NAME              TOT_CRED
+------ -------------------- -------------------- ----------
+   898 Hello                Biology                      99
+   128 Zhang                CS                          102
+ 12345 Shankar              CS                           42
+ 19991 Brandt               History                      80
+ 23121 Chavez               Finance                     110
+ 44553 John                 Physics                      56
+ 45678 Mozart               Physics                      56
+ 54321 Williams             CS                           54
+ 55739 Sanchez              Music                        48
+ 76543 Brown                CS                           58
+
+    ID NAME                 DEPT_NAME              TOT_CRED
+------ -------------------- -------------------- ----------
+ 76653 Aoi                  EEE                          60
+ 98765 Bourikas             EEE                          98
+ 98988 Tanaka               Biology                     120
+
+savepoint one;
+
+Savepoint created.
+
+update student set name='hiii' where id=898;
+
+
+    ID NAME                 DEPT_NAME              TOT_CRED
+------ -------------------- -------------------- ----------
+   897 Hello                Biology                      99
+   898 hiii                 Biology                      99
+   128 Zhang                CS                          102
+ 12345 Shankar              CS                           42
+ 19991 Brandt               History                      80
+ 23121 Chavez               Finance                     110
+ 44553 John                 Physics                      56
+ 45678 Mozart               Physics                      56
+ 54321 Williams             CS                           54
+ 55739 Sanchez              Music                        48
+ 76543 Brown                CS                           58
+
+    ID NAME                 DEPT_NAME              TOT_CRED
+------ -------------------- -------------------- ----------
+ 76653 Aoi                  EEE                          60
+ 98765 Bourikas             EEE                          98
+ 98988 Tanaka               Biology                     120
+
+savepoint two;
+
+Savepoint created.
+
+update student set name='hiii2' where id=898;
+
+
+    ID NAME                 DEPT_NAME              TOT_CRED
+------ -------------------- -------------------- ----------
+   897 Hello                Biology                      99
+   898 hiii2                Biology                      99
+   128 Zhang                CS                          102
+ 12345 Shankar              CS                           42
+ 19991 Brandt               History                      80
+ 23121 Chavez               Finance                     110
+ 44553 John                 Physics                      56
+ 45678 Mozart               Physics                      56
+ 54321 Williams             CS                           54
+ 55739 Sanchez              Music                        48
+ 76543 Brown                CS                           58
+
+    ID NAME                 DEPT_NAME              TOT_CRED
+------ -------------------- -------------------- ----------
+ 76653 Aoi                  EEE                          60
+ 98765 Bourikas             EEE                          98
+ 98988 Tanaka               Biology                     120
+
+rollback to two;
+
+Rollback complete.
+
+     ID NAME                 DEPT_NAME              TOT_CRED
+------- -------------------- -------------------- ----------
+    897 Hello                Biology                      99
+    898 hiii                 Biology                      99
+    128 Zhang                CS                          102
+  12345 Shankar              CS                           42
+  19991 Brandt               History                      80
+  23121 Chavez               Finance                     110
+  44553 John                 Physics                      56
+  45678 Mozart               Physics                      56
+  54321 Williams             CS                           54
+  55739 Sanchez              Music                        48
+  76543 Brown                CS                           58
+
+     ID NAME                 DEPT_NAME              TOT_CRED
+------- -------------------- -------------------- ----------
+  76653 Aoi                  EEE                          60
+  98765 Bourikas             EEE                          98
+  98988 Tanaka               Biology                     120
+
+rollback to one;
+
+Rollback complete.
+
+    ID NAME                 DEPT_NAME              TOT_CRED
+------ -------------------- -------------------- ----------
+   897 Hello                Biology                      99
+   898 Hello                Biology                      99
+   128 Zhang                CS                          102
+ 12345 Shankar              CS                           42
+ 19991 Brandt               History                      80
+ 23121 Chavez               Finance                     110
+ 44553 John                 Physics                      56
+ 45678 Mozart               Physics                      56
+ 54321 Williams             CS                           54
+ 55739 Sanchez              Music                        48
+ 76543 Brown                CS                           58
+
+    ID NAME                 DEPT_NAME              TOT_CRED
+------ -------------------- -------------------- ----------
+ 76653 Aoi                  EEE                          60
+ 98765 Bourikas             EEE                          98
+ 98988 Tanaka               Biology                     120
+
+

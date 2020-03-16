@@ -1,0 +1,89 @@
+1
+create or replace trigger credits_new 
+before DELETE OR INSERT OR UPDATE
+of credits 
+on course 
+for each row 
+when (new.credits > 0)
+DECLARE 
+begin
+  dbms_output.put_line('old credit is ' || :old.credits);
+  dbms_output.put_line('new credit is ' || :new.credits);
+  end;
+/
+
+SQL> update course set credits=credits+1 where title='Robotics';
+old credit is 6
+new credit is 7
+
+2
+create or replace trigger salary_new 
+after DELETE OR INSERT OR UPDATE 
+of salary 
+on instructor 
+for each row
+begin
+  insert into newsalary2 values(:old.name,:old.salary,:new.salary,:new.salary-:old.salary);
+end;
+/
+
+SQL> update instructor set salary=salary+10000;
+SQL> select * from newsalary2;
+
+NAME                  OLDSALARY  NEWSALARY DIFFERENCE
+-------------------- ---------- ---------- ----------
+Srinivasan                90090     100090      10000
+Wu                        99000     109000      10000
+Mozart                    46200      56200      10000
+Einstein                 104500     114500      10000
+El said                   69300      79300      10000
+Gold                      95700     105700      10000
+Katz                      82500      92500      10000
+Califieri                 71610      81610      10000
+Crick                     83160      93160      10000
+Brandt                   101200     111200      10000
+Kim                       88000      98000      10000
+
+3
+create or replace trigger course_enter 
+before insert 
+on course 
+for each row 
+when(new.credits<3)
+begin 
+  RAISE_APPLICATION_ERROR(-20010,'Credits must be greater than 3');
+  end;
+/
+
+SQL> insert into course(credits) values (2);
+insert into course(credits) values (2)
+            *
+ERROR at line 1:
+ORA-20010: Credits must be greater than 3
+ORA-06512: at "R518.COURSE_ENTER", line 2
+ORA-04088: error during execution of trigger 'R518.COURSE_ENTER'
+
+4
+create or replace trigger no_delete 
+before delete 
+on takes 
+for each row 
+when(old.year=2009 and old.semester='Fall')
+begin 
+  RAISE_APPLICATION_ERROR(-20010,'Invalid entry');
+end;
+/
+
+SQL> delete from takes where id=128;
+delete from takes where id=128
+            *
+ERROR at line 1:
+ORA-20010: Invalid entry
+ORA-06512: at "R518.NO_DELETE", line 2
+ORA-04088: error during execution of trigger 'R518.NO_DELETE'
+
+5
+SQL> drop trigger no_delete;
+
+Trigger dropped.
+

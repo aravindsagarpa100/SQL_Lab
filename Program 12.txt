@@ -1,0 +1,185 @@
+1
+DECLARE 
+   a integer:=&a;
+   c_name instructor.name%type; 
+   c_dept instructor.dapt_name%type; 
+   c_salary instructor.salary%type; 
+   CURSOR c_instructor is 
+      SELECT name,dapt_name,salary FROM instructor where salary>a; 
+BEGIN 
+   OPEN c_instructor; 
+   LOOP 
+   FETCH c_instructor into c_name, c_dept, c_salary; 
+      EXIT WHEN c_instructor%notfound; 
+      dbms_output.put_line(c_name || ' ' || c_dept || ' ' || c_salary); 
+   END LOOP; 
+   CLOSE c_instructor; 
+END; 
+/
+
+Enter value for a: 98000
+old   2:    a integer:=&a;
+new   2:    a integer:=98000;
+Srinivasan CS 100090
+Wu Finance 109000
+Einstein Physics 114500
+Gold Physics 105700
+Brandt CS 111200
+
+2
+DECLARE
+	c_dept instr_count.dept_name%type;
+	c_inst instr_count.numinstr%type;
+	c_course course_count.numcourse%type;
+	cursor c_count is 
+		select instr_count.dept_name,instr_count.numinstr,course_count.numcourse from instr_count inner join course_count on instr_count.dept_name = course_count.dept_name;
+BEGIN
+	OPEN c_count;
+	LOOP
+		FETCH c_count into c_dept,c_inst,c_course;
+		EXIT WHEN c_count%notfound;
+		dbms_output.put_line(c_dept||' '||c_inst||' '||c_course);
+	END LOOP;
+	CLOSE c_count;
+END;
+/
+
+CS 3 5
+Finance 1 1
+Biology 1 2
+Music 1 1
+
+3
+DECLARE
+	c_id instructor.id%type;
+	c_name instructor.name%type;
+	c_sal instructor.salary%type;
+	b instructor.name%type;
+	c instructor.id%type;
+	a number;
+	CURSOR c_inst is
+		SELECT id,name,salary FROM instructor order by salary desc;
+BEGIN
+	OPEN c_inst;
+	for a in 1 ..5
+	LOOP
+		FETCH c_inst into c_id,c_name,c_sal;
+		EXIT WHEN c_inst%notfound;
+		dbms_output.put_line(c_id || ' ' || c_name || ' ' || c_sal);
+	END LOOP;
+	CLOSE c_inst;
+END;
+/
+
+22222 Einstein 114500
+83821 Brandt 111200
+12121 Wu 109000
+33456 Gold 105700
+10101 Srinivasan 100090
+
+4
+DECLARE
+	c_id instructor.id%type;
+	c_name instructor.name%type;
+	c_sal instructor.salary%type;
+	a number;
+	CURSOR c_inst is
+		SELECT id, name, salary FROM instructor;
+BEGIN
+	OPEN c_inst;
+	LOOP
+	FETCH c_inst into c_id, c_name, c_sal;
+	EXIT WHEN c_inst%notfound;
+	IF c_sal < 80000 
+	THEN
+		c_sal:=1.2*c_sal;
+		dbms_output.put_line(c_id || ' ' || c_name || ' ' || c_sal);
+	ELSE
+		c_sal:=1.12*c_sal;
+		dbms_output.put_line(c_id || ' ' || c_name || ' ' || c_sal);
+	END IF;
+	END LOOP;
+	CLOSE c_inst;
+END;
+/
+
+10101 Srinivasan 112101
+12121 Wu 122080
+15151 Mozart 67440
+22222 Einstein 128240
+32343 El said 95160
+33456 Gold 118384
+45565 Katz 103600
+58583 Califieri 91403
+76766 Crick 104339
+83821 Brandt 124544
+98345 Kim 109760
+
+5
+DECLARE
+	id takes.id%type;
+	cid takes.course_id%type;
+	sid takes.sec_id%type;
+	sem takes.semester%type;
+	y takes.year%type;
+	g takes.grade%type;
+	a number;
+	CURSOR c_inst is
+		SELECT id,course_id,sec_id,semester,year,grade FROM takes where grade ='A';
+BEGIN
+	a:=1;
+	OPEN c_inst;
+	LOOP
+	FETCH c_inst into id,cid,sid,sem,y,g;
+	EXIT WHEN c_inst%notfound;
+	dbms_output.put_line(id || ' ' ||cid || ' ' || sid || ' ' || sem || ' ' || y || ' ' || g);
+	a:=a+1;
+	END LOOP;
+	dbms_output.put_line('No. of rows='||a);
+	CLOSE c_inst;
+END;
+/
+
+128 CS-101 1 Fall 2009 A
+12345 CS-190 2 Spring 2009 A
+12345 CS-315 1 Spring 2010 A
+12345 CS-347 1 Fall 2009 A
+76543 CS-101 1 Fall 2009 A
+76543 CS-319 2 Spring 2010 A
+98988 BIO-101 1 Summer 2009 A
+No. of rows=8
+
+
+2 remaining
+
+create view instr_count 
+as select d.dept_name,count(*) 
+as numinstr 
+from department d,instructor i 
+where d.dept_name=i.dapt_name 
+group by d.dept_name;
+
+View created.
+
+create view course_count 
+as select d.dept_name,count(*) as numcourse
+from department d,course c 
+where d.dept_name=c.dept_name 
+group by d.dept_name;
+
+View created.
+
+select instr_count.dept_name,instr_count.numinstr,course_count.numcourse 
+from instr_count 
+inner join course_count 
+on instr_count.dept_name=course_count.dept_name;
+
+
+DEPT_NAME    NUMINSTR  NUMCOURSE
+---------- ---------- ----------
+CS                  3          5
+Finance             1          1
+Biology             1          2
+Music               1          1
+
+

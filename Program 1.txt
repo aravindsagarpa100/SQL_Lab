@@ -1,0 +1,55 @@
+1
+
+SQL> create table CLASSROOM(Building  varchar(10),room_no int primary key,capaci
+ty int);
+SQL> create table DEPARTMENT(dept_name varchar(10) primary key,building varchar(
+10),budget int);
+SQL> create table COURSE(course_id varchar(10) primary key,title varchar(20),dep
+t_name varchar(10),credits int);
+SQL> create table INSTRUCTOR(id int primary key,name varchar(15),dapt_name varch
+ar(10),salary int);
+SQL> create table STUDENT(id int primary key,name varchar(20),dept_name varchar(
+20),tot_cred int);
+SQL> create table SECTION(course_id varchar(10),sec_id int,semester varchar(15),
+year int,building varchar(10),room_number int);
+SQL> create table TEACHES(id int,course_id varchar(10),sec_id int,semester varch
+ar(15),year int);
+SQL> create table TAKES(id int,course_id varchar(10),sec_id int,semester varchar
+(15),year int,grade varchar(5));
+
+2.1
+
+SQL> alter table COURSE modify course_id varchar(15);
+
+2.2
+
+SQL> alter table DEPARTMENT add dept_no number;
+
+2.3
+
+SQL> alter table student modify name VARCHAR(20) NOT NULL;
+
+2.4
+
+SQL> ALTER TABLE CLASSROOM modify capacity int default 50;
+
+2.5
+
+SQL> ALTER TABLE department modify building  unique;
+
+2.6
+
+SQL> alter table instructor add constraint gt check (salary > 50000);
+
+2.7
+
+SQL> alter table takes rename to subject;
+
+3
+
+SQL> alter table instructor drop constraint gt;
+
+
+
+
+
